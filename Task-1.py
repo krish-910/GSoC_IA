@@ -57,7 +57,7 @@ def write_urls(item):
                 with FileLock(file_path + '.lock'):
                     with gzip.open(file_path, 'at', encoding='utf-8') as file:
                         count += 1
-                        file.write(f"{item_name}\n{count}\n{redirected_url}\n\n")
+                        file.write(f"{item_name}\n{count}{redirected_url}\n\n")
     except Exception as e:
         logging.error(f"Error processing item {item_id}: {e}")
 
