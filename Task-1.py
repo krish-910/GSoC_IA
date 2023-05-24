@@ -5,6 +5,7 @@ import time
 import logging
 import requests
 from tenacity import retry, stop_after_attempt, wait_exponential
+from filelock import FileLock
 
 # Configure logging
 logging.basicConfig(filename='error.log', level=logging.ERROR)
@@ -23,14 +24,16 @@ file_path = 'text_files_urls.txt.gz'
 
 count = 0  # Counter for the number of URLs
 
+# Initialize requests session
+session = requests.Session()
+
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
 def get_item_metadata(item_id):
     return ia.get_item(item_id)
 
 def get_redirected_url(url):
     try:
-        session = requests.Session()
-        response = session.get(url, allow_redirects=True)
+        response = session.head(url, allow_redirects=True)
         return response.url
     except Exception as e:
         logging.error(f"Error getting redirected URL: {e}")
@@ -51,14 +54,10 @@ def write_urls(item):
                 text_file_url = f"https://archive.org/download/{item_id}/{file['name']}"
                 redirected_url = get_redirected_url(text_file_url)
 
-                print(f"Item: {item_name}")
-                print(f"Original URL: {text_file_url}")
-                print(f"Redirected URL: {redirected_url}")
-                print()
-
-                with gzip.open(file_path, 'at', encoding='utf-8') as file:
-                    count += 1
-                    file.write(f"{item_name} - {count} {redirected_url}\n")
+                with FileLock(file_path + '.lock'):
+                    with gzip.open(file_path, 'at', encoding='utf-8') as file:
+                        count += 1
+                        file.write(f"{item_name}\n{count}\n{redirected_url}\n\n")
     except Exception as e:
         logging.error(f"Error processing item {item_id}: {e}")
 
