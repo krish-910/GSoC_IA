@@ -1,3 +1,4 @@
+import argparse
 import internetarchive as ia
 import gzip
 import concurrent.futures
@@ -56,7 +57,13 @@ print(collection_count)
 # Create a compressed file to store the redirected text file URLs
 file_path = 'text_files_urls.txt.gz'
 
-count = 0  # Counter for the number of URLs
+
+# Parse the command-line arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--resume', type=int, default=0, help='Resume processing from the specified index')
+args = parser.parse_args()
+
+count = args.resume if args.resume > 0 else 0      # Counter for the number of URLs
 lock = threading.Lock()  # Thread lock for synchronized access to count variable
 
 # Initialize requests session
@@ -75,13 +82,17 @@ def get_redirected_url(url):
     return url
 '''
 
-def write_urls(item):
+def write_urls(item,start_index):
     global count
     # Define the media type
     media_type = 'texts'
 
     # Get all items in the collection with Media Type - Text
     items = list(ia.search_items('collection:' + item + ' mediatype:' + media_type))
+
+    # Set the start index for processing
+    items = items[start_index:]
+
     for item in items:
       item_id = item['identifier']
       item_metadata_url = f"https://archive.org/metadata/{item_id}"
@@ -114,14 +125,14 @@ max_threads = 8
 with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
     futures = []
     for collection_id in collection_ids:
-        futures.append(executor.submit(write_urls, collection_id))
+        futures.append(executor.submit(write_urls, collection_id, args.resume - 1))
 
     # Wait for all tasks to complete
     concurrent.futures.wait(futures)
 
 end_time = time.time()
-execution_time = end_time - start_time
+execution_time = end_time - start_time 
 
-#print("Total URLs:", count)
+print("Total URLs:", count)
 print("URLs saved to compressed file:", file_path)
 print("Execution time:", execution_time, "seconds")
