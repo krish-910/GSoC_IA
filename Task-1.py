@@ -15,14 +15,6 @@ logging.basicConfig(filename='error.log', level=logging.ERROR)
 collection_info = [
     {'name': 'governmentpublications', 'subject_filter': None},
     {'name': 'USGovernmentDocuments', 'subject_filter': None},
-    {'name': 'library_and_archives_canada', 'subject_filter': None},
-    {'name': 'fedlink', 'subject_filter': None},
-    {'name': 'ualbertaeducationguides', 'subject_filter': None},
-    {'name': 'albertagovernmentpublications', 'subject_filter': None},
-    {'name': 'lacbac', 'subject_filter': None},
-    {'name': 'nasa', 'subject_filter': None},
-    {'name': 'us_census', 'subject_filter': None},
-    {'name': 'sim_microfilm', 'subject_filter': 'Government Documents'}
 ]
 collection_ids = []
 collection_count = 0
@@ -54,84 +46,115 @@ for collection_info in collection_info:
     print()
 print(collection_count)
 
+
+def save_progress(progress_file_path, collection_id, count):
+    with open(progress_file_path, 'w') as f:
+        f.write(f"{collection_id}\n{count}")
+
+
+def load_progress(progress_file_path):
+    try:
+        with open(progress_file_path) as f:
+            content = f.readlines()
+            return content[0].strip(), int(content[1])
+    except FileNotFoundError:
+        return None, 0
+
+
+def load_collected_urls(file_path):
+    try:
+        with gzip.open(file_path, 'rt', encoding='utf-8') as file:
+            return set(file.read().split('\n\n')[:-1])
+    except FileNotFoundError:
+        return set()
+
+
+progress_file = 'progress.txt'
+loaded_collection_id, loaded_count = load_progress(progress_file)
+loaded_collection_id = loaded_collection_id.strip().split(':')[1].strip()[1:-2] if loaded_collection_id else ''
+
 # Create a compressed file to store the redirected text file URLs
 file_path = 'text_files_urls.txt.gz'
 
+# Load already collected URLs
+collected_urls = load_collected_urls(file_path)
 
-# Parse the command-line arguments
-parser = argparse.ArgumentParser()
-parser.add_argument('--resume', type=int, default=0, help='Resume processing from the specified index')
-args = parser.parse_args()
-
-count = args.resume if args.resume > 0 else 0      # Counter for the number of URLs
+count = loaded_count  # Counter for the number of URLs
 lock = threading.Lock()  # Thread lock for synchronized access to count variable
 
 # Initialize requests session
 session = requests.Session()
 
+
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
 def get_item_metadata(item_id):
     return ia.get_item(item_id)
-'''
-def get_redirected_url(url):
-    try:
-        response = session.head(url, allow_redirects=True)
-        return response.url
-    except Exception as e:
-        logging.error(f"Error getting redirected URL: {e}")
-    return url
-'''
 
-def write_urls(item,start_index):
+
+def write_urls(collection_idx_tuple):
     global count
     # Define the media type
     media_type = 'texts'
-
+    collection_idx, item = collection_idx_tuple
     # Get all items in the collection with Media Type - Text
     items = list(ia.search_items('collection:' + item + ' mediatype:' + media_type))
+    if loaded_collection_id != '':
+        if item == loaded_collection_id:  # Continue only after reaching the last processed collection.
+            start_index = max(loaded_count + 1 - count, 0)
+        else:
+            start_index = 0  # Skip this collection.
+        # Set the start index for processing
+        items = items[start_index:]
 
-    # Set the start index for processing
-    items = items[start_index:]
+        for item in items:
+            item_id = item['identifier']
+            item_metadata_url = f"https://archive.org/metadata/{item_id}"
+            try:
+                # Retrieve metadata for the item
+                item_metadata = get_item_metadata(item_id)
+                item_name = item_metadata.metadata['title']
+                # Look for the text file with format 'DjVuTXT' and name like '*.txt'
+                for file in item_metadata.files:
+                    if file['format'] == 'DjVuTXT' and file['name'].endswith('.txt'):
+                        text_file_url = f"https://archive.org/download/{item_id}/{file['name']}"
+                        with lock:
+                            current_count = count  # Store current count to ensure accuracy during writing
+                            if current_count >= start_index:
+                                count += 1
+                                if text_file_url not in collected_urls:
+                                    with gzip.open(file_path, 'at', encoding='utf-8') as file:
+                                        file.write(f"{item_name}\n{current_count}  {text_file_url}\n\n")
+                                    # Save progress at every successful URL addition.
+                                    save_progress(progress_file, item, count)
+                                    collected_urls.add(text_file_url)
+            except Exception as e:
+                logging.error(f"Error processing item {item_id}: {e}")
 
-    for item in items:
-      item_id = item['identifier']
-      item_metadata_url = f"https://archive.org/metadata/{item_id}"
-      try:
-          # Retrieve metadata for the item
-          item_metadata = get_item_metadata(item_id)
-          item_name = item_metadata.metadata['title']
-
-          # Look for the text file with format 'DjVuTXT' and name like '*.txt'
-          for file in item_metadata.files:
-              if file['format'] == 'DjVuTXT' and file['name'].endswith('.txt'):
-                  text_file_url = f"https://archive.org/download/{item_id}/{file['name']}"
-                  #redirected_url = get_redirected_url(text_file_url)
-
-                  with lock:
-                      count += 1
-                      current_count = count  # Store current count to ensure accuracy during writing
-                      with gzip.open(file_path, 'at', encoding='utf-8') as file:
-                          file.write(f"{item_name}\n{current_count}  {text_file_url}\n\n")
-      except Exception as e:
-          logging.error(f"Error processing item {item_id}: {e}")
 
 # Measure the execution time
 start_time = time.time()
 
 # Set the maximum number of concurrent threads
 max_threads = 8
-
 # Use multi-threading to process the items concurrently
 with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
     futures = []
-    for collection_id in collection_ids:
-        futures.append(executor.submit(write_urls, collection_id, args.resume - 1))
+
+    skip_until_loaded_item_found = True if loaded_collection_id else False
+    for idx, collection_id in enumerate(collection_ids):
+        if loaded_collection_id != '' and collection_id == loaded_collection_id:
+            skip_until_loaded_item_found = False
+        print(skip_until_loaded_item_found)
+        if not skip_until_loaded_item_found:
+            print(loaded_collection_id)
+            print("Hello")
+            futures.append(executor.submit(write_urls, (idx, collection_id)))
 
     # Wait for all tasks to complete
     concurrent.futures.wait(futures)
 
 end_time = time.time()
-execution_time = end_time - start_time 
+execution_time = end_time - start_time
 
 print("Total URLs:", count)
 print("URLs saved to compressed file:", file_path)
