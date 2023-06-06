@@ -15,6 +15,14 @@ logging.basicConfig(filename='error.log', level=logging.ERROR)
 collection_info = [
     {'name': 'governmentpublications', 'subject_filter': None},
     {'name': 'USGovernmentDocuments', 'subject_filter': None},
+    {'name': 'library_and_archives_canada', 'subject_filter': None},
+    {'name': 'fedlink', 'subject_filter': None},
+    {'name': 'ualbertaeducationguides', 'subject_filter': None},
+    {'name': 'albertagovernmentpublications', 'subject_filter': None},
+    {'name': 'lacbac', 'subject_filter': None},
+    {'name': 'nasa', 'subject_filter': None},
+    {'name': 'us_census', 'subject_filter': None},
+    {'name': 'sim_microfilm', 'subject_filter': 'Government Documents'}
 ]
 collection_ids = []
 collection_count = 0
@@ -144,10 +152,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
     for idx, collection_id in enumerate(collection_ids):
         if loaded_collection_id != '' and collection_id == loaded_collection_id:
             skip_until_loaded_item_found = False
-        print(skip_until_loaded_item_found)
         if not skip_until_loaded_item_found:
-            print(loaded_collection_id)
-            print("Hello")
             futures.append(executor.submit(write_urls, (idx, collection_id)))
 
     # Wait for all tasks to complete
