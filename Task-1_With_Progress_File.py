@@ -15,6 +15,14 @@ logging.basicConfig(filename='error.log', level=logging.ERROR)
 collection_info = [
     {'name': 'governmentpublications', 'subject_filter': None},
     {'name': 'USGovernmentDocuments', 'subject_filter': None},
+    {'name': 'library_and_archives_canada', 'subject_filter': None},
+    {'name': 'fedlink', 'subject_filter': None},
+    {'name': 'ualbertaeducationguides', 'subject_filter': None},
+    {'name': 'albertagovernmentpublications', 'subject_filter': None},
+    {'name': 'lacbac', 'subject_filter': None},
+    {'name': 'nasa', 'subject_filter': None},
+    {'name': 'us_census', 'subject_filter': None},
+    {'name': 'sim_microfilm', 'subject_filter': 'Government Documents'}
 ]
 collection_ids = []
 collection_count = 0
@@ -106,10 +114,10 @@ def write_urls(collection_idx_tuple):
     if loaded_collection_id != '':
         if collection_id == loaded_collection_id:  # Continue only after reaching the last processed collection.
             start_index = max(loaded_count + 1 - count, 0)
-    else:
-        start_index = 0  # Skip this collection.
-        # Set the start index for processing
-    items = items[start_index:]
+        else:
+            start_index = 0  # Skip this collection.
+            # Set the start index for processing
+            items = items[start_index:]
 
     for item in items:
         item_id = item['identifier']
@@ -126,9 +134,10 @@ def write_urls(collection_idx_tuple):
                         current_count = count  # Store current count to ensure accuracy during writing
                         if current_count >= start_index:
                             count += 1
+                            current_count = count
                             if text_file_url not in collected_urls:
                                 with gzip.open(file_path, 'at', encoding='utf-8') as file:
-                                    file.write(f"{item_name}\n{count}  {text_file_url}\n\n")
+                                    file.write(f"{item_name}\n{current_count}  {text_file_url}\n\n")
                                     # Save progress at every successful URL addition.
                                     save_progress(progress_file, collection_id, count)
                                     collected_urls.add(text_file_url)
@@ -148,10 +157,8 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
     skip_until_loaded_item_found = True if loaded_collection_id else False
     for idx, collection_id in enumerate(collection_ids):
         if collection_id == loaded_collection_id:
-            print(collection_id)
-            print(loaded_collection_id)
             skip_until_loaded_item_found = False
-        if not skip_until_loaded_item_found:            
+        if not skip_until_loaded_item_found:          
             futures.append(executor.submit(write_urls, (idx, collection_id)))
 
     # Wait for all tasks to complete
