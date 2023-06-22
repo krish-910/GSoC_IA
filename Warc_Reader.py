@@ -1,61 +1,76 @@
 import warcio
 import requests
-from bs4 import BeautifulSoup
-import gzip
-from sanitize_filename import sanitize
-from PyPDF2 import PdfReader
 from io import BytesIO
+import tempfile
+from pdfminer.high_level import extract_text
+from pdfminer.pdfparser import PDFSyntaxError
 
-# Open the GZIP-compressed WARC file
-warc_file = 'NRC-20230130192125-00001.warc.gz'
-with gzip.open(warc_file, 'rb') as gzipped_warc:
-    # Create an ArchiveIterator for the GZIP-compressed WARC file
-    warc_iterator = warcio.archiveiterator.ArchiveIterator(gzipped_warc)
-
-    # Initialize variables for storing URLs and links
-    urls = []
-    links = []
-
-    # Iterate over each record in the WARC file
-    for record in warc_iterator:
-        # Process response records containing PDF files
-        if record.rec_type == 'response' and record.http_headers.get_header('Content-Type') == 'application/pdf':
-            # Extract the URL and response content
-            url = record.rec_headers.get_header('WARC-Target-URI')
-            response_content = record.content_stream().read()
-
-            # Extract text from the PDF file
-            with BytesIO(response_content) as pdf_buffer:
-                pdf = PdfReader(pdf_buffer)
-                text = ' '.join([page.extract_text() for page in pdf.pages])
-
-                # Save the extracted text in output.txt
-                with open('output.txt', 'a', encoding='utf-8') as output_file:
-                    output_file.write(f"URL: {url}\n")
-                    output_file.write(f"Text:\n{text}\n\n")
-
-        # Process HTML response records
-        elif record.rec_type == 'response' and record.http_headers.get_header('Content-Type') == 'text/html':
-            # Extract the URL and response content
-            url = record.rec_headers.get_header('WARC-Target-URI')
-            response_content = record.content_stream().read()
-
-            # Parse the HTML content
-            soup = BeautifulSoup(response_content, 'html.parser')
-
-            # Extract useful data from the HTML, e.g., scrape specific elements
-            # Example: Extract all links from the HTML
-            extracted_links = [link['href'] for link in soup.find_all('a') if link.get('href')]
-
-            # Add the URL and links to the respective lists
+# Read the URLs from text_files_urls.txt
+urls = []
+with open('text_files_urls.txt', 'r') as urls_file:
+    lines = urls_file.readlines()
+    for line in lines:
+        # Extract the URL from the line
+        url_start_index = line.find('http')
+        if url_start_index != -1:
+            url = line[url_start_index:].strip()
             urls.append(url)
-            links.extend(extracted_links)
 
-    # Save the URLs and links in output.txt
-    with open('output.txt', 'a', encoding='utf-8') as output_file:
-        output_file.write("URLs:\n")
-        output_file.write('\n'.join(urls))
-        output_file.write("\n\nLinks:\n")
-        output_file.write('\n'.join(links))
+print(f"Total URLs: {len(urls)}")
+
+# Iterate over each URL
+for url in urls:
+    print(f"Processing URL: {url}")
+
+    # Download the WARC file as an HTTP stream
+    response = requests.get(url, stream=True)
+    print(f"Response status code: {response.status_code}")
+
+    # Save the response content to a temporary file
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(response.content)
+        temp_file.seek(0)
+
+        # Open the temporary file as a GZIP-compressed WARC file
+        warc_file = warcio.ArchiveIterator(open(temp_file.name, 'rb'))
+
+        # Initialize a list for storing extracted PDF text
+        extracted_text = []
+
+        # Initialize a list for storing problematic PDF files
+        problematic_files = []
+
+        # Iterate over each record in the WARC file
+        for record in warc_file:
+            # Process response records containing PDF files
+            if record.rec_type == 'response' and record.http_headers.get_header('Content-Type') == 'application/pdf':
+                # Extract the response content (PDF)
+                response_content = record.content_stream().read()
+
+                # Extract text from the PDF file
+                with BytesIO(response_content) as pdf_buffer:
+                    try:
+                        text = extract_text(pdf_buffer)
+                        extracted_text.append(text)
+                    except PDFSyntaxError as e:
+                        print(f"Error extracting text from PDF: {e}. Skipping this file.")
+                        problematic_files.append(response_content)
+
+        # Save the extracted text in output.txt
+        with open('output.txt', 'a', encoding='utf-8') as output_file:
+            output_file.write(f"URL: {url}\n")
+            output_file.write(f"Text:\n")
+            output_file.write('\n\n'.join(extracted_text))
+            output_file.write('\n\n')
+
+        # Save the problematic PDF files
+        for i, file_content in enumerate(problematic_files):
+            with open(f'problematic_pdf_{i+1}.pdf', 'wb') as pdf_file:
+                pdf_file.write(file_content)
+
+    # Close the WARC file
+    warc_file.close()
+
+    print(f"Finished processing URL: {url}")
 
 print("Data extraction and saving completed.")
