@@ -5,15 +5,16 @@ import csv
 nlp = spacy.load('en_core_web_sm')
 nlp.max_length = 3000000
 
+# Entity types to keep
+entity_types_to_keep = ['PERSON', 'NORP', 'FAC', 'ORG', 'GPE', 'EVENT', 'DATE', 'TOPIC']
+
 # Function to perform Named Entity Recognition (NER)
 def perform_ner(text):
     doc = nlp(text)
-    entities = []
+    entities = set()  # Set to store unique entities
     for ent in doc.ents:
-        entities.append({
-            'text': ent.text,
-            'entity_type': ent.label_
-        })
+        if ent.label_ in entity_types_to_keep:
+            entities.add((ent.text, ent.label_))
     return entities
 
 # Function to extract topics from the text
@@ -48,18 +49,18 @@ def preprocess_data(file_path, document_marker):
                     entities = perform_ner(current_doc)
                     topics = extract_topics(current_doc)
                     entity_dict = {}
-                    for entity in entities:
-                        entity_type = entity['entity_type']
+                    for entity, entity_type in entities:
                         if entity_type not in entity_dict:
-                            entity_dict[entity_type] = [entity['text']]
+                            entity_dict[entity_type] = set([entity])
                         else:
-                            entity_dict[entity_type].append(entity['text'])
+                            entity_dict[entity_type].add(entity)
                     for topic in topics:
                         entity_type = topic['entity_type']
+                        entity = topic['text']
                         if entity_type not in entity_dict:
-                            entity_dict[entity_type] = [topic['text']]
+                            entity_dict[entity_type] = set([entity])
                         else:
-                            entity_dict[entity_type].append(topic['text'])
+                            entity_dict[entity_type].add(entity)
                     yield entity_dict
                     current_doc = ""
             elif start_new_doc:
@@ -72,18 +73,18 @@ def preprocess_data(file_path, document_marker):
             entities = perform_ner(current_doc)
             topics = extract_topics(current_doc)
             entity_dict = {}
-            for entity in entities:
-                entity_type = entity['entity_type']
+            for entity, entity_type in entities:
                 if entity_type not in entity_dict:
-                    entity_dict[entity_type] = [entity['text']]
+                    entity_dict[entity_type] = set([entity])
                 else:
-                    entity_dict[entity_type].append(entity['text'])
+                    entity_dict[entity_type].add(entity)
             for topic in topics:
                 entity_type = topic['entity_type']
+                entity = topic['text']
                 if entity_type not in entity_dict:
-                    entity_dict[entity_type] = [topic['text']]
+                    entity_dict[entity_type] = set([entity])
                 else:
-                    entity_dict[entity_type].append(topic['text'])
+                    entity_dict[entity_type].add(entity)
             yield entity_dict
 
 # Specify the input file path
@@ -105,7 +106,7 @@ with open(output_file, 'w', encoding='utf-8', newline='') as output_file:
 
     # Process the preprocessed data
     for entities in preprocessed_data:
-        for entity_type, entity_list in entities.items():
-            writer.writerow([entity_type, entity_list])
+        for entity_type, entity_set in entities.items():
+            writer.writerow([entity_type, ', '.join(entity_set)])
 
 print("Entities output has been written to the file: entities_output.csv")
