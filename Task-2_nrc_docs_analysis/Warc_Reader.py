@@ -1,3 +1,4 @@
+# Import necessary libraries
 import warcio
 import requests
 from io import BytesIO
@@ -5,72 +6,94 @@ import tempfile
 from pdfminer.high_level import extract_text
 from pdfminer.pdfparser import PDFSyntaxError
 
-# Read the URLs from text_files_urls.txt
-urls = []
-with open('text_files_urls.txt', 'r') as urls_file:
-    lines = urls_file.readlines()
-    for line in lines:
-        # Extract the URL from the line
-        url_start_index = line.find('http')
-        if url_start_index != -1:
-            url = line[url_start_index:].strip()
-            urls.append(url)
+# Define a class to process documents
+class DocumentProcessor:
+    def __init__(self):
+        self.urls = []
 
-print(f"Total URLs: {len(urls)}")
+    def read_urls(self, urls_file_path):
+        # Read URLs from the provided file
+        with open(urls_file_path, 'r') as urls_file:
+            lines = urls_file.readlines()
+            for line in lines:
+                print(line)
+                # Find the index where 'http' starts in the line
+                url_start_index = line.find('http')
+                if url_start_index != -1:
+                    # Extract the URL and add it to the list
+                    url = line[url_start_index:].strip()
+                    self.urls.append(url)
 
-# Iterate over each URL
-for url in urls:
-    print(f"Processing URL: {url}")
+    def process_documents(self):
+        total_pdfs_processed = 0
 
-    # Download the WARC file as an HTTP stream
-    response = requests.get(url, stream=True)
-    print(f"Response status code: {response.status_code}")
+        for url in self.urls:
+            print(f"Processing URL: {url}")
+            try:
+                # Send an HTTP GET request to the URL
+                response = requests.get(url, stream=True)
+                print(f"Response status code: {response.status_code}")
 
-    # Save the response content to a temporary file
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        temp_file.write(response.content)
-        temp_file.seek(0)
+                # Create a temporary file to store the response content
+                with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                    temp_file.write(response.content)
+                    temp_file.seek(0)
 
-        # Open the temporary file as a GZIP-compressed WARC file
-        warc_file = warcio.ArchiveIterator(open(temp_file.name, 'rb'))
+                    # Initialize the WARC archive iterator
+                    warc_file = warcio.ArchiveIterator(open(temp_file.name, 'rb'))
 
-        # Initialize a list for storing extracted PDF text
-        extracted_text = []
+                    extracted_data = []
+                    problematic_files = []
 
-        # Initialize a list for storing problematic PDF files
-        problematic_files = []
+                    # Iterate through the records in the WARC archive
+                    for record in warc_file:
+                        if record.rec_type == 'response':
+                            content_type = record.http_headers.get_header('Content-Type')
+                            response_content = record.content_stream().read()
 
-        # Iterate over each record in the WARC file
-        for record in warc_file:
-            # Process response records containing PDF files
-            if record.rec_type == 'response' and record.http_headers.get_header('Content-Type') == 'application/pdf':
-                # Extract the response content (PDF)
-                response_content = record.content_stream().read()
+                            if content_type == 'application/pdf':
+                                total_pdfs_processed += 1
+                                try:
+                                    # Extract text from PDF using pdfminer
+                                    text = extract_text(BytesIO(response_content))
+                                    extracted_data.append(text)
+                                    extracted_data.append("<DOCUMENT_END_MARKER>")
+                                except PDFSyntaxError as e:
+                                    print(f"Error extracting text from PDF: {e}. Skipping this file.")
+                                    problematic_files.append(response_content)
+                            else:
+                                # If not a PDF, add the content as-is
+                                extracted_data.append(response_content.decode(errors='ignore'))
 
-                # Extract text from the PDF file
-                with BytesIO(response_content) as pdf_buffer:
-                    try:
-                        text = extract_text(pdf_buffer)
-                        extracted_text.append(text)
-                    except PDFSyntaxError as e:
-                        print(f"Error extracting text from PDF: {e}. Skipping this file.")
-                        problematic_files.append(response_content)
+                    if extracted_data:
+                        # Write extracted data and problematic files to output file
+                        with open('output.txt', 'a', encoding='utf-8') as output_file:
+                            output_file.write(f"URL: {url}\n")
+                            output_file.write(f"Data:\n")
+                            output_file.write('\n\n'.join(extracted_data))
+                            output_file.write('\n\n')
+                            output_file.write(f"Problematic Files:\n")
+                            for i, file_content in enumerate(problematic_files):
+                                output_file.write(f"Problematic File {i+1}:\n")
+                                output_file.write(file_content.decode(errors='ignore'))
+                                output_file.write('\n\n')
 
-        # Save the extracted text in output.txt
-        with open('output.txt', 'a', encoding='utf-8') as output_file:
-            output_file.write(f"URL: {url}\n")
-            output_file.write(f"Text:\n")
-            output_file.write('\n\n'.join(extracted_text))
-            output_file.write('\n\n')
+                        print(f"Added document marker for URL: {url}")
+                    else:
+                        print(f"No data extracted for URL: {url}")
 
-        # Save the problematic PDF files
-        for i, file_content in enumerate(problematic_files):
-            with open(f'problematic_pdf_{i+1}.pdf', 'wb') as pdf_file:
-                pdf_file.write(file_content)
+                    # Close the WARC file
+                    warc_file.close()
 
-    # Close the WARC file
-    warc_file.close()
+                    print(f"Finished processing URL: {url}")
+            except Exception as err:
+                print(f"An error occurred while processing the URL: {url}. Error: {err}")
 
-    print(f"Finished processing URL: {url}")
+        print(f"Data extraction and saving completed. Total PDFs processed: {total_pdfs_processed}")
 
-print("Data extraction and saving completed.")
+# Entry point of the program
+if __name__ == "__main__":
+    urls_file_path = 'text_files_urls.txt'  # Path to the file containing URLs
+    doc_processor = DocumentProcessor()      # Create an instance of DocumentProcessor class
+    doc_processor.read_urls(urls_file_path)  # Read URLs from the file
+    doc_processor.process_documents()        # Process the documents and extract data
