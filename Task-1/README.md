@@ -1,7 +1,7 @@
 # GSoC_IA
 This repository contains my contributions to the Internet Archive organization as part of the Google Summer of Code (GSoC) program         
 
---> Task-1.py                                                                                                                                         
+--> Task-1                                                                                                                                       
 
 Below is the combined README file for both `task1_with_progress_file.py` and `task1_without_progress_file.py` scripts. The README includes an explanation of both scripts, their usage, and other relevant information:
 
