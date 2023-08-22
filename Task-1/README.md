@@ -12,9 +12,7 @@ The Internet Archive Text Files Downloader is a Python script that allows you to
 ## Requirements
 
 - Python 3.x
-- internetarchive library
-- requests library
-- tenacity library
+- Required Python libraries (`argparse`, `internetarchive`, `gzip`, `concurrent.futures`, `time`, `logging`, `requests`, `tenacity`, `threading`)
 
 ## Installation
 
