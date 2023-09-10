@@ -49,6 +49,6 @@ The Internet Archive, a 501(c)(3)non-profit, is building a digital library of In
    - It extracts data from these PDFs using the pdfminer library and compiles the extracted content, along with problematic files, into an output file.
    - This script adds depth to the data pool by making PDF content more accessible.
 
-#Overall Vision: 
+# Overall Vision: 
 
 Through the coordinated execution of these scripts, the vision is to create an enriched environment for users to explore NRC government data interactively. The scripts facilitate the extraction of meaningful entities, identification of frequent topics, and analysis of document clusters, organizations, and persons. The resulting Clustergrammer-compatible matrices offer users a dynamic interface to navigate and comprehend the NRC's vast repository, fostering better understanding and engagement with regulatory information.
