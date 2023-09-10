@@ -1,4 +1,4 @@
-# GSoC_IA
+# Google Summer of Code 2023 Final Work
 This repository contains my contributions to the Internet Archive organization as part of the Google Summer of Code (GSoC) program         
 
 *Interactive Analysis of NRC Gov Data*
