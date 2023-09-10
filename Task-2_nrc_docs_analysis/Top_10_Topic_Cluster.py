@@ -215,7 +215,6 @@ top_10_topics = [topic for topic, _ in topic_freq.most_common(10)]
 # Extract Document Titles along with PDF URLs
 Document_Titles = extract_Document_Title(urls_file_path, pdf_urls)
 
-print(len(Document_Titles))
 
 # Open the output file and write the content
 output_file = 'clustergrammer_input.txt'
@@ -235,14 +234,13 @@ try:
             # Check if any of the top 10 topics are present in the document
             if any(topic in top_10_topics for topic in doc_topics):
                 data_row = f'{pdf_url}\t'
-            for topic in top_10_topics:
-                topic_present = topic in doc_topics
-                data_row += "1\t" if topic_present else "0\t"
-
-            output_file.write(data_row.strip() + "\n")
+                for topic in top_10_topics:
+                    topic_present = topic in doc_topics
+                    data_row += "1\t" if topic_present else "0\t"
+                output_file.write(data_row.strip() + "\n")
           else:
             print(f"Error: doc_index {doc_index} is out of range for Document_Titles")
-    
+
     print("Data matrix in desired format has been written to the file: clustergrammer_input.txt")
 except Exception as e:
     print(f"Error occurred while writing the output file: {e}")
