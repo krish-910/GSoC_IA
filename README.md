@@ -85,6 +85,6 @@ Through the coordinated execution of these scripts, the vision is to create an e
 # Acknowledgements
 I am deeply grateful to Google for organizing the Google Summer of Code initiative, which has provided an incredible opportunity for me to contribute to the open-source community. This program has not only facilitated my personal development but has also motivated those around me to engage in open-source projects.
 
-I want to sincerely thank my mentor Vangelis Banos (@vbanos) for the invaluable support and guidance they provided throughout the program. Their expertise and insights have played a crucial role in shaping my path and ensuring the success of my project.
+I want to sincerely thank my mentor Vangelis Banos (https://github.com/vbanos) for the invaluable support and guidance they provided throughout the program. Their expertise and insights have played a crucial role in shaping my path and ensuring the success of my project.
 
 Participating in this program has been an enriching and transformative experience, allowing me to delve into the realm of software engineering, enhance my research skills, and contribute meaningfully to the open-source community.
