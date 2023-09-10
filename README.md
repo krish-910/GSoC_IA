@@ -12,9 +12,7 @@ Project link: https://summerofcode.withgoogle.com/programs/2023/projects/MMFObnC
 
 Project Name: Improving Democracy’s Library
 
-Project Summary:
-
-# Interactive Analysis of NRC Gov Data
+Project Summary: Interactive Analysis of NRC Gov Data
 
 In the quest for advancing regulatory transparency and promoting public engagement, the aim is to transform the vast repository of Nuclear Regulatory Commission (NRC) government data into an interactive and insightful resource. By leveraging a collection of carefully crafted scripts, this initiative seeks to provide users with the ability to explore, analyze, and gain meaningful insights from the NRC's documents and reports.
 
