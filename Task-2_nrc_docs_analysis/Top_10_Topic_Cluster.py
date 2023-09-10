@@ -223,7 +223,7 @@ output_file = 'clustergrammer_input.txt'
 try:
     with open(output_file, 'w', encoding='utf-8') as output_file:
         # Write the header row
-        header = "Document Title\tTopics\t" + "\t".join(top_10_topics) + "\n"
+        header = "Document Title\t" + "\t".join(top_10_topics) + "\n"
         output_file.write(header)
 
         # Write the data rows
@@ -234,7 +234,8 @@ try:
             doc_topics = doc['topics']
             # Check if any of the top 10 topics are present in the document
             if any(topic in top_10_topics for topic in doc_topics):
-                data_row = f'{pdf_url}>{doc_title}\t'            
+                data_row = f'{pdf_url}\t'
+                print(data_row)
             for topic in top_10_topics:
                 topic_present = topic in doc_topics
                 data_row += "1\t" if topic_present else "0\t"
