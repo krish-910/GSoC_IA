@@ -71,7 +71,7 @@ These scripts functioned synergistically, creating an enriched environment where
 *Visualizing the Data: Clustergrammer-Web Integration*
 To amplify data accessibility and visualization, I seamlessly integrated the project with Clustergrammer-Web. This transformative integration facilitated the conversion of data from the TSV format into a visually engaging clustering heatmap. Users could now interactively explore the NRC data, gaining deeper comprehension and understanding.
 
-*Conclusion: Advancing Regulatory Transparency and Public Engagement*
+## Conclusion: Advancing Regulatory Transparency and Public Engagement*
 Through the culmination of these efforts, I significantly advanced regulatory transparency and heightened public engagement with the NRC documents. The ensemble of developed scripts, coupled with the Clustergrammer-Web integration, made regulatory information not only accessible but also comprehensible. This project represents a pivotal milestone in enhancing the usability and accessibility of government data, ultimately empowering the public to actively participate in the regulatory discourse.
 
 # Overall Vision: 
