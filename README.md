@@ -34,14 +34,14 @@ Today their archive contains:
 890,000 software programs
 
 # Contributions during GSoC:
-*Summary of Contributions to Internet Archive via GSoC*
+## Summary of Contributions to Internet Archive via GSoC
 
 As a dedicated contributor to the Internet Archive organization through the Google Summer of Code (GSoC) program, I embarked on a transformative project aimed at enhancing the accessibility and comprehensibility of the Nuclear Regulatory Commission (NRC) documents. This ambitious endeavor was driven by the overarching goal of promoting regulatory transparency and empowering the public to actively engage with this valuable repository of information.
 
-*The Challenge: Enhancing Accessibility and Comprehension*
+## The Challenge: Enhancing Accessibility and Comprehension
 The NRC's extensive collection of documents presented a formidable challenge due to its sheer volume and complexity, making it a daunting task for users to navigate and extract meaningful insights. In response to this challenge, my mission was to architect a multifaceted solution that would empower users to not only access these documents but also decipher their significance.
 
-*The Solution: Empowering Users with Interactive Tools*
+## The Solution: Empowering Users with Interactive Tools
 
 My solution involved the development of a series of meticulously crafted Python scripts, each possessing a unique role and contributing to the overarching mission:
 
@@ -65,14 +65,16 @@ My solution involved the development of a series of meticulously crafted Python 
    - Developed a specialized script tailored to process URLs pointing to WARC files containing PDF documents.
    - Employed the pdfminer library to extract data from PDFs, ensuring that all documents, regardless of format, were accessible for exploration and analysis.
 
-*The Vision: Empowering Users to Explore and Engage*
+## The Vision: Empowering Users to Explore and Engage
 These scripts functioned synergistically, creating an enriched environment where users could extract profound insights, grasp the nuances of the regulatory landscape, and engage with the information on a more profound level.
 
-*Visualizing the Data: Clustergrammer-Web Integration*
+## Visualizing the Data: Clustergrammer-Web Integration
 To amplify data accessibility and visualization, I seamlessly integrated the project with Clustergrammer-Web. This transformative integration facilitated the conversion of data from the TSV format into a visually engaging clustering heatmap. Users could now interactively explore the NRC data, gaining deeper comprehension and understanding.
 
 ## Conclusion: Advancing Regulatory Transparency and Public Engagement*
 Through the culmination of these efforts, I significantly advanced regulatory transparency and heightened public engagement with the NRC documents. The ensemble of developed scripts, coupled with the Clustergrammer-Web integration, made regulatory information not only accessible but also comprehensible. This project represents a pivotal milestone in enhancing the usability and accessibility of government data, ultimately empowering the public to actively participate in the regulatory discourse.
+For a more comprehensive and detailed description, please refer to the readme file located in the respective folder for the task. It contains all the necessary information and instructions to use the scripts successfully.
+
 
 # Overall Vision: 
 
