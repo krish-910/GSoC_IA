@@ -19,6 +19,14 @@ In the quest for advancing regulatory transparency and promoting public engageme
 # About the Organisation
 The Internet Archive, a 501(c)(3)non-profit, is building a digital library of Internet sites and other cultural artifacts in digital form. Like a paper library, They provide free access to researchers, historians, scholars, people with print disabilities, and the general public. Their mission is to provide Universal Access to All Knowledge.
 
+Today their archive contains:
+
+735 billion web pages
+41 million books and texts
+14.7 million audio recordings (including 240,000 live concerts)
+8.4 million videos (including 2.4 million Television News programs)
+4.4 million images
+890,000 software programs
 
 # Script Summaries:
 
