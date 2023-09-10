@@ -1,5 +1,7 @@
 # Google Summer of Code 2023 Final Work
-This repository contains my contributions to the Internet Archive organization as part of the Google Summer of Code (GSoC) program         
+This repository contains my contributions to the Internet Archive organization as part of the Google Summer of Code (GSoC) program 
+
+![download](https://github.com/krish-910/GSoC_IA/assets/77330476/f903de43-6b41-4818-8f7a-a97c902d8f0d)
 
 *Interactive Analysis of NRC Gov Data*
 
