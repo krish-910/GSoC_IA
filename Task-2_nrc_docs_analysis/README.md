@@ -36,8 +36,9 @@ The script provides cluster analysis results and execution time information, inc
 This script processes preprocessed text data and identifies the top 10 most frequent topics in the documents. It creates a Clustergrammer-compatible matrix indicating the presence of these topics in each document and saves the results in an output file.
 
 *Usage:*
-1. Ensure you have the necessary input file (`output.txt`) containing preprocessed text data and document markers.
-2. Run the script.
+1. Install dependency like internetarchive , warcio using pip. (Ex - pip install internetarchive, pip install warcio)
+2. Ensure you have the necessary input file (`output.txt`) and (text_file_urls.txt) containing preprocessed text data alongwith document markers and text file containing       all urls.
+3. Run the script.
 
 *Output:*
 The script generates a Clustergrammer-compatible output file with rows representing documents and columns representing the top 10 topics, along with binary indicators of topic presence.
@@ -50,8 +51,9 @@ The script generates a Clustergrammer-compatible output file with rows represent
 This script processes preprocessed text data and extracts organizations' named entities. It identifies the top 50 most frequently occurring organizations, creates a Clustergrammer-compatible matrix indicating the frequency of these organizations in each document, and saves the results in an output file.
 
 *Usage:*
-1. Ensure you have the necessary input file (`output.txt`) containing preprocessed text data and document markers.
-2. Run the script.
+1. Install dependency like internetarchive , warcio using pip. (Ex - pip install internetarchive, pip install warcio)
+2. Ensure you have the necessary input file (`output.txt`) and (text_file_urls.txt) containing preprocessed text data alongwith document markers and text file containing       all urls.
+3. Run the script.
 
 *Output:*
 The script generates a Clustergrammer-compatible output file with rows representing documents and columns representing the top 50 organizations, along with frequency values.
@@ -64,8 +66,9 @@ The script generates a Clustergrammer-compatible output file with rows represent
 This script processes preprocessed text data and extracts persons' named entities. It identifies the top 50 most frequently occurring persons, creates a Clustergrammer-compatible matrix indicating the frequency of these persons in each document, and saves the results in an output file.
 
 *Usage:*
-1. Ensure you have the necessary input file (`output.txt`) containing preprocessed text data and document markers.
-2. Run the script.
+1. Install dependency like internetarchive , warcio using pip. (Ex - pip install internetarchive, pip install warcio)
+2. Ensure you have the necessary input file (`output.txt`) and (text_file_urls.txt) containing preprocessed text data alongwith document markers and text file containing       all urls.
+3. Run the script.
 
 *Output:*
 The script generates a Clustergrammer-compatible output file with rows representing documents and columns representing the top 50 persons, along with frequency values.
