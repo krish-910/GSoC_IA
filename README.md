@@ -33,7 +33,7 @@ Today their archive contains:
 
 890,000 software programs
 
-# Script Summaries:
+# Contributions during GSoC:
 
 1. Entity_Extraction.py
    - This script employs Named Entity Recognition (NER) to extract specific types of entities (such as organizations and persons) from textual data.
