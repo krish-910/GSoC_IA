@@ -1,11 +1,26 @@
 # Google Summer of Code 2023 Final Work
 This repository contains my contributions to the Internet Archive organization as part of the Google Summer of Code (GSoC) program 
 
-![download](https://github.com/krish-910/GSoC_IA/assets/77330476/f903de43-6b41-4818-8f7a-a97c902d8f0d)
+![final](https://github.com/krish-910/GSoC_IA/assets/77330476/9148986c-d16a-4291-ba2c-029d0f85d4c0)
+
+Introduction
+Name: Krish Shewani
+
+Organisation: Internet Archive
+
+Project link: https://summerofcode.withgoogle.com/programs/2023/projects/MMFObnCX 
+
+Project Name: Improving Democracy’s Library
+
+Project Summary:
 
 *Interactive Analysis of NRC Gov Data*
 
 In the quest for advancing regulatory transparency and promoting public engagement, the aim is to transform the vast repository of Nuclear Regulatory Commission (NRC) government data into an interactive and insightful resource. By leveraging a collection of carefully crafted scripts, this initiative seeks to provide users with the ability to explore, analyze, and gain meaningful insights from the NRC's documents and reports.
+
+*About the Organisation*
+The Internet Archive, a 501(c)(3)non-profit, is building a digital library of Internet sites and other cultural artifacts in digital form. Like a paper library, They provide free access to researchers, historians, scholars, people with print disabilities, and the general public. Their mission is to provide Universal Access to All Knowledge.
+
 
 *Script Summaries:*
 
