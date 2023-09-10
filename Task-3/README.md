@@ -88,32 +88,36 @@ Now that you are familiar with Clustergrammer-Web's capabilities, you can integr
 
 To embed Clustergrammer within an iframe, follow these steps:
 
-python
 # Upload a file to the Clustergrammer web app and visualize using an Iframe
 
 !pip install clustergrammer_widget
+
 from clustergrammer import Network
+
 from copy import deepcopy
+
 net = deepcopy(Network())
+
 link = net.Iframe_web_app('clustergrammer_input.txt')
+
 print(link)
 
 
 ### Using Clustergrammer-Web API
 
 To use Clustergrammer-Web's API, follow these steps:
-
-python
 # Using Clustergrammer-Web API
 
 import requests
 
 filename = 'clustergrammer_input.txt'
+
 upload_url = 'http://amp.pharm.mssm.edu/clustergrammer/matrix_upload/'
 
 r = requests.post(upload_url, files={'file': open(filename, 'rb')})
 
 link = r.text
+
 print(link)
 
 
