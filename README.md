@@ -34,33 +34,45 @@ Today their archive contains:
 890,000 software programs
 
 # Contributions during GSoC:
+*Summary of Contributions to Internet Archive via GSoC*
 
-1. Entity_Extraction.py
-   - This script employs Named Entity Recognition (NER) to extract specific types of entities (such as organizations and persons) from textual data.
-   - It preprocesses input data, identifies entities, and tallies their frequency for further analysis.
-   - The results are then structured in a format compatible with the Clustergrammer tool.
+As a dedicated contributor to the Internet Archive organization through the Google Summer of Code (GSoC) program, I embarked on a transformative project aimed at enhancing the accessibility and comprehensibility of the Nuclear Regulatory Commission (NRC) documents. This ambitious endeavor was driven by the overarching goal of promoting regulatory transparency and empowering the public to actively engage with this valuable repository of information.
 
-2. Task-2.py
-   - A comprehensive script that orchestrates multiple tasks for efficient data extraction and analysis from the Internet Archive.
-   - It retrieves text file URLs, downloads files, preprocesses text data, and performs document clustering using TF-IDF and KMeans.
-   - The script clusters documents, analyzes clusters, and presents execution time information.
+*The Challenge: Enhancing Accessibility and Comprehension*
+The NRC's extensive collection of documents presented a formidable challenge due to its sheer volume and complexity, making it a daunting task for users to navigate and extract meaningful insights. In response to this challenge, my mission was to architect a multifaceted solution that would empower users to not only access these documents but also decipher their significance.
 
-3. Top_10_Topic_Cluster.py
-   - This script focuses on identifying and extracting the top 10 most frequent topics present within the preprocessed text data.
-   - By creating a Clustergrammer-compatible matrix, the script enables a visual representation of topic presence across documents.
+*The Solution: Empowering Users with Interactive Tools*
 
-4. Top_50_Orgs_Cluster.py
-   - A script dedicated to extracting and ranking the top 50 most frequently occurring organizations from the preprocessed text data.
-   - It generates a Clustergrammer-formatted matrix that showcases the frequency of these organizations across documents.
+My solution involved the development of a series of meticulously crafted Python scripts, each possessing a unique role and contributing to the overarching mission:
 
-5. Top_50_Person_Cluster.py
-   - Similar to the organizations script, this one extracts and ranks the top 50 most frequently occurring persons.
-   - By visualizing the frequency of persons across documents, the script enhances the interactivity and insights of the data.
+1. *Entity Extraction: Identifying Key Players and Stakeholders*
+   - Leveraged the power of Named Entity Recognition (NER) through the spaCy library to pinpoint organizations and individuals mentioned within the text.
+   - Aggregated and analyzed entity frequencies, providing users with valuable insights into the key players and stakeholders shaping the regulatory landscape.
 
-6. Warc_Reader.py
-   - A script tailored to processing URLs pointing to WARC files containing PDFs.
-   - It extracts data from these PDFs using the pdfminer library and compiles the extracted content, along with problematic files, into an output file.
-   - This script adds depth to the data pool by making PDF content more accessible.
+2. *Data Extraction and Analysis: Uncovering Patterns and Similarities*
+   - Engineered a comprehensive script that seamlessly retrieved text file URLs from the Internet Archive, fetched the corresponding files, and preprocessed the textual data.
+   - Applied sophisticated techniques, including TF-IDF and KMeans clustering algorithms, to perform document clustering. This intelligent categorization unveiled hidden patterns and similarities within the vast corpus of documents.
+
+3. *Identifying Top Topics: A Quick Overview of Significant Themes*
+   - Pioneered a script designed to identify and rank the top 10 most frequently occurring topics within the preprocessed text data.
+   - By visualizing the prevalence of these topics across documents, users were provided with a concise overview of the most pivotal themes encapsulated within the NRC documents.
+
+4. *Organizations and Persons: Understanding Key Entities*
+   - Articulated two distinct scripts, each devoted to extracting and ranking the top 50 organizations and individuals most frequently referenced in the documents.
+   - Through the dynamic visualization of entity frequencies across documents, users were empowered to recognize the pivotal organizations and influential individuals contributing to the regulatory landscape.
+
+5. *Making PDF Content Accessible: Adding Depth to the Data Pool*
+   - Developed a specialized script tailored to process URLs pointing to WARC files containing PDF documents.
+   - Employed the pdfminer library to extract data from PDFs, ensuring that all documents, regardless of format, were accessible for exploration and analysis.
+
+*The Vision: Empowering Users to Explore and Engage*
+These scripts functioned synergistically, creating an enriched environment where users could extract profound insights, grasp the nuances of the regulatory landscape, and engage with the information on a more profound level.
+
+*Visualizing the Data: Clustergrammer-Web Integration*
+To amplify data accessibility and visualization, I seamlessly integrated the project with Clustergrammer-Web. This transformative integration facilitated the conversion of data from the TSV format into a visually engaging clustering heatmap. Users could now interactively explore the NRC data, gaining deeper comprehension and understanding.
+
+*Conclusion: Advancing Regulatory Transparency and Public Engagement*
+Through the culmination of these efforts, I significantly advanced regulatory transparency and heightened public engagement with the NRC documents. The ensemble of developed scripts, coupled with the Clustergrammer-Web integration, made regulatory information not only accessible but also comprehensible. This project represents a pivotal milestone in enhancing the usability and accessibility of government data, ultimately empowering the public to actively participate in the regulatory discourse.
 
 # Overall Vision: 
 
