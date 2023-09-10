@@ -90,7 +90,7 @@ To embed Clustergrammer within an iframe, follow these steps:
 
 # Upload a file to the Clustergrammer web app and visualize using an Iframe
 
-!pip install clustergrammer_widget
+pip install clustergrammer_widget
 
 from clustergrammer import Network
 
