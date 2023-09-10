@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to the Clustergrammer-Web Integration README. This comprehensive guide outlines the process of using Clustergrammer-Web locally and integrating it with your data extracted from the Nuclear Regulatory Commission (NRC) documents. Clustergrammer-Web is a robust platform renowned for its data visualization capabilities, making it an invaluable tool for enhancing the accessibility and usability of intricate datasets.
+Welcome to the Clustergrammer-Web Integration README. This comprehensive guide outlines the process of using Clustergrammer-Web locally, integrating it with your data extracted from the Nuclear Regulatory Commission (NRC) documents, and also provides details on how to use Clustergrammer via an iframe or its API.
 
 ## Why Clustergrammer-Web?
 
@@ -53,7 +53,7 @@ The Clustergrammer-Web application offers a user-friendly interface designed for
 
 2. *Uploading Data:*
 
-   - Find the "Upload Data" section on the left side of the UI.
+   - Locate the "Upload Data" section on the left side of the UI.
    - Use the "Choose File" button to select a data file from your local machine.
    - After selecting the file, click the "Upload" button to load the data into the application.
    - The uploaded data will be displayed in the main area of the UI.
@@ -82,4 +82,41 @@ These instructions offer a fundamental understanding of how to use the Clustergr
 
 Now that you are familiar with Clustergrammer-Web's capabilities, you can integrate it with the data extracted from the NRC documents. Prepare your data in TSV format and follow the "Integration Steps" section provided in the earlier README.
 
-Enjoy harnessing the potent visualization capabilities of Clustergrammer-Web to gain profound insights into your NRC data.
+## Using Clustergrammer via Iframe or API
+
+### Using Clustergrammer via Iframe
+
+To embed Clustergrammer within an iframe, follow these steps:
+
+python
+# Upload a file to the Clustergrammer web app and visualize using an Iframe
+
+!pip install clustergrammer_widget
+from clustergrammer import Network
+from copy import deepcopy
+net = deepcopy(Network())
+link = net.Iframe_web_app('clustergrammer_input.txt')
+print(link)
+
+
+### Using Clustergrammer-Web API
+
+To use Clustergrammer-Web's API, follow these steps:
+
+python
+# Using Clustergrammer-Web API
+
+import requests
+
+filename = 'clustergrammer_input.txt'
+upload_url = 'http://amp.pharm.mssm.edu/clustergrammer/matrix_upload/'
+
+r = requests.post(upload_url, files={'file': open(filename, 'rb')})
+
+link = r.text
+print(link)
+
+
+These code snippets demonstrate how to upload and visualize data with Clustergrammer via an iframe or its API, extending the flexibility and usability of this powerful tool.
+
+Enjoy harnessing the potent visualization capabilities of Clustergrammer-Web to gain profound insights into your NRC data and easily integrate it into your projects.
