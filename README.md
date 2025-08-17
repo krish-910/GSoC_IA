@@ -35,14 +35,12 @@ Today their archive contains:
 
 # Contributions during GSoC:
 ## Summary of Contributions to Internet Archive via GSoC
-
 As a dedicated contributor to the Internet Archive organization through the Google Summer of Code (GSoC) program, I embarked on a transformative project aimed at enhancing the accessibility and comprehensibility of the Nuclear Regulatory Commission (NRC) documents. This ambitious endeavor was driven by the overarching goal of promoting regulatory transparency and empowering the public to actively engage with this valuable repository of information.
 
 ## The Challenge: Enhancing Accessibility and Comprehension
 The NRC's extensive collection of documents presented a formidable challenge due to its sheer volume and complexity, making it a daunting task for users to navigate and extract meaningful insights. In response to this challenge, my mission was to architect a multifaceted solution that would empower users to not only access these documents but also decipher their significance.
 
 ## The Solution: Empowering Users with Interactive Tools
-
 My solution involved the development of a series of meticulously crafted Python scripts, each possessing a unique role and contributing to the overarching mission:
 
 1. *Entity Extraction: Identifying Key Players and Stakeholders*
@@ -79,7 +77,6 @@ Through the culmination of these efforts, I significantly advanced regulatory tr
 
 
 # Overall Vision: 
-
 Through the coordinated execution of these scripts, the vision is to create an enriched environment for users to explore NRC government data interactively. The scripts facilitate the extraction of meaningful entities, identification of frequent topics, and analysis of document clusters, organizations, and persons. The resulting Clustergrammer-compatible matrices offer users a dynamic interface to navigate and comprehend the NRC's vast repository, fostering better understanding and engagement with regulatory information.
 
 # Acknowledgements
