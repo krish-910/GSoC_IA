@@ -1,15 +1,12 @@
 # Clustergrammer-Web Integration README
 
 ## Introduction
-
 Welcome to the Clustergrammer-Web Integration README. This comprehensive guide outlines the process of using Clustergrammer-Web locally, integrating it with your data extracted from the Nuclear Regulatory Commission (NRC) documents, and also provides details on how to use Clustergrammer via an iframe or its API.
 
 ## Why Clustergrammer-Web?
-
 In the realm of data exploration and analysis, Clustergrammer-Web stands as a powerful ally. Its user-friendly interface and dynamic visualization features empower users to make sense of complex data structures quickly. When integrated with data extracted from NRC documents, Clustergrammer-Web transforms raw information into intuitive, interactive visualizations.
 
 ## Running Clustergrammer-Web Locally
-
 Before diving into data integration, you need to run Clustergrammer-Web locally. The following steps guide you through the process:
 
 1. *Clone the Clustergrammer Repository:*
@@ -89,7 +86,6 @@ Now that you are familiar with Clustergrammer-Web's capabilities, you can integr
 To embed Clustergrammer within an iframe, follow these steps:
 
 # Upload a file to the Clustergrammer web app and visualize using an Iframe
-
 pip install clustergrammer_widget
 
 from clustergrammer import Network
@@ -104,7 +100,6 @@ print(link)
 
 
 ### Using Clustergrammer-Web API
-
 To use Clustergrammer-Web's API, follow these steps:
 # Using Clustergrammer-Web API
 
